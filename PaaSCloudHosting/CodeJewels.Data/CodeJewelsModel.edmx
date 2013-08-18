@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CodeJewelModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="CodeJewelModelStoreContainer">
+          <EntitySet Name="Categories" EntityType="CodeJewelModel.Store.Categories" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CodeJewels" EntityType="CodeJewelModel.Store.CodeJewels" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Votes" EntityType="CodeJewelModel.Store.Votes" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_CodeJewels_Categories" Association="CodeJewelModel.Store.FK_CodeJewels_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="CodeJewels" EntitySet="CodeJewels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Votes_CodeJewels" Association="CodeJewelModel.Store.FK_Votes_CodeJewels">
+            <End Role="CodeJewels" EntitySet="CodeJewels" />
+            <End Role="Votes" EntitySet="Votes" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CodeJewels">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="AuthorMail" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="SourceCode" Type="varchar(max)" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Votes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="AuthorMail" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CodeJewelId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CodeJewels_Categories">
+          <End Role="Categories" Type="CodeJewelModel.Store.Categories" Multiplicity="1" />
+          <End Role="CodeJewels" Type="CodeJewelModel.Store.CodeJewels" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CodeJewels">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Votes_CodeJewels">
+          <End Role="CodeJewels" Type="CodeJewelModel.Store.CodeJewels" Multiplicity="1" />
+          <End Role="Votes" Type="CodeJewelModel.Store.Votes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CodeJewels">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Votes">
+              <PropertyRef Name="CodeJewelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CodeJewelModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CodeJewelEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="CodeJewelModel.Category" />
+          <EntitySet Name="CodeJewels" EntityType="CodeJewelModel.CodeJewel" />
+          <EntitySet Name="Votes" EntityType="CodeJewelModel.Vote" />
+          <AssociationSet Name="FK_CodeJewels_Categories" Association="CodeJewelModel.FK_CodeJewels_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="CodeJewels" EntitySet="CodeJewels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Votes_CodeJewels" Association="CodeJewelModel.FK_Votes_CodeJewels">
+            <End Role="CodeJewels" EntitySet="CodeJewels" />
+            <End Role="Votes" EntitySet="Votes" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="CodeJewels" Relationship="CodeJewelModel.FK_CodeJewels_Categories" FromRole="Categories" ToRole="CodeJewels" />
+        </EntityType>
+        <EntityType Name="CodeJewel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="AuthorMail" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="SourceCode" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="CodeJewelModel.FK_CodeJewels_Categories" FromRole="CodeJewels" ToRole="Categories" />
+          <NavigationProperty Name="Votes" Relationship="CodeJewelModel.FK_Votes_CodeJewels" FromRole="CodeJewels" ToRole="Votes" />
+        </EntityType>
+        <EntityType Name="Vote">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="AuthorMail" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="CodeJewelId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CodeJewel" Relationship="CodeJewelModel.FK_Votes_CodeJewels" FromRole="Votes" ToRole="CodeJewels" />
+        </EntityType>
+        <Association Name="FK_CodeJewels_Categories">
+          <End Role="Categories" Type="CodeJewelModel.Category" Multiplicity="1" />
+          <End Role="CodeJewels" Type="CodeJewelModel.CodeJewel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CodeJewels">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Votes_CodeJewels">
+          <End Role="CodeJewels" Type="CodeJewelModel.CodeJewel" Multiplicity="1" />
+          <End Role="Votes" Type="CodeJewelModel.Vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CodeJewels">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Votes">
+              <PropertyRef Name="CodeJewelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CodeJewelModelStoreContainer" CdmEntityContainer="CodeJewelEntities">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="CodeJewelModel.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CodeJewels">
+            <EntityTypeMapping TypeName="CodeJewelModel.CodeJewel">
+              <MappingFragment StoreEntitySet="CodeJewels">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AuthorMail" ColumnName="AuthorMail" />
+                <ScalarProperty Name="SourceCode" ColumnName="SourceCode" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Votes">
+            <EntityTypeMapping TypeName="CodeJewelModel.Vote">
+              <MappingFragment StoreEntitySet="Votes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="AuthorMail" ColumnName="AuthorMail" />
+                <ScalarProperty Name="CodeJewelId" ColumnName="CodeJewelId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
